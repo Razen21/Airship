@@ -3,31 +3,37 @@
 
 namespace Airship.Buffers;
 
-public class Buffer : IBuffer
+public class SimpleByteBuffer : IByteBuffer
 {
     private readonly MemoryStream _stream;
     private readonly BinaryReader _reader;
     private readonly BinaryWriter _writer;
     
-    public byte[] Data { get; }
+    public byte[] Buffer { get; }
 
-    public Buffer(byte[] data)
+    public SimpleByteBuffer(byte[] buffer)
     {
-        Data = data;
-        _stream = new MemoryStream(Data);
+        Buffer = buffer;
+        _stream = new MemoryStream(Buffer);
         _reader = new BinaryReader(_stream);
         _writer = new BinaryWriter(_stream);
     }
 
-    public Buffer() : this(Array.Empty<byte>()) {}
+    public SimpleByteBuffer() : this(Array.Empty<byte>()) {}
     
     public void Skip(long amount) => _stream.Position += amount;
 
-    public IBuffer WriteByte(byte value)
+    public IByteBuffer WriteByte(byte value)
     {
         _writer.Write(value);
         return this;
     }
+
+    public IByteBuffer WriteShort(short value)
+    {
+        _writer.Write(value);
+        return this;
+    } 
 
 
 
